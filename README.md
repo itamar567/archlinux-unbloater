@@ -1,7 +1,7 @@
 # What Is Unbloater?
 Unbloater is a quick script i wrote in bash to remove unnecessarily packages from my ArchLinux system.
 # How can I use it?
-1. clone this repository and change to the new directory:  
+1. clone this repository and install the package:  
 `git clone https://github.com/itamar567/archlinux-unbloater.git && cd archlinux-unbloater && makepkg -si`
 
 2. run the script:
