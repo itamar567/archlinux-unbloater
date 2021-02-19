@@ -1,0 +1,27 @@
+#!/bin/bash
+pacman -Qq > /tmp/all_packages # get all installed packages
+
+sed -e 's/$/ 1/' -i /tmp/all_packages # add "1" to every package (we need it for dialog)
+
+mapfile -t array < /tmp/all_packages  # get array from file
+
+rm /tmp/all_packages # remove unneeded files
+
+
+dialog --no-items --checklist 'Select packages to keep' 1920 1080 ${#array[@]} ${array[@]} 2>bloated_pkgs # show dialog
+
+mapfile -t keep < bloated_pkgs # save results in array "keep" 
+
+arr=" ${array[*]} "
+arr=$(echo $arr|sed 's/ 1 / /g') # remove all the "1"s from the list (it was used for dialog, now we dont need it anymore)
+# remove the programs the user selected from the list of programs to remove
+for i in ${keep[@]}; do
+  arr=$(echo $arr|sed "s/ $i / /g") 
+done
+
+echo "$arr" > bloated_pkgs # save in file
+
+sed -i '$ s/.$//' bloated_pkgs # to remove last character (1)
+
+clear
+echo 'run "pacman -Runs $(cat bloated_pkgs)" in order to remove the bloated packages'
